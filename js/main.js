@@ -12,8 +12,6 @@ const getRandomNumbarValue = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-getRandomNumbarValue(0, 1);
-
 const checkLengthString = (lengthString, validlength) => lengthString <= validlength;
 
 checkLengthString(20, 140);
@@ -35,8 +33,25 @@ const NAMES = [
   'Максим',
   'Игорь',
   'Владимир',
-  'Олег',
+  'Елена',
+  'Рома',
+  'Сергей',
 ];
+
+const DESCRIPTION = [
+  'Phasellus quis mauris ac nibh.',
+  'Duis pellentesque tincidunt urna vel.',
+  'Vestibulum ante ipsum primis in.',
+  'Curabitur laoreet tristique luctus. Quisque.',
+  'Integer vitae augue in ligula.',
+  'Quisque aliquam purus ac dui.',
+  'Morbi iaculis imperdiet pretium. Proin.',
+  'Integer ullamcorper, eros in porttitor.',
+  'Donec pulvinar metus est, et.',
+  'Sed ac velit quis neque.',
+];
+
+const NECESSARY_SUM_OBJECTS = 25;
 
 const generateData = (num, functionGenerate) => {
   const arrayObjects = [];
@@ -60,17 +75,18 @@ const generateComment = (num) => {
 };
 
 const generateObject = (num) => {
+  const necessarySumObjects = getRandomNumbarValue(1, 5);
+
   const object = {
     id: num,
     url: `photos/${num}.jpg`,
-    description: '',
+    description: DESCRIPTION[getRandomNumbarValue(0, DESCRIPTION.length - 1)],
     likes: getRandomNumbarValue(15, 200),
-    comments: generateData(getRandomNumbarValue(1, 5), generateComment),
+    comments: generateData(necessarySumObjects, generateComment),
   };
 
   return object;
 };
 
 // Массив нужных данных
-generateData(25, generateObject);
-
+generateData(NECESSARY_SUM_OBJECTS, generateObject);
