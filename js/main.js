@@ -3,11 +3,6 @@ const getRandomNumbarValue = (min, max) => {
   min = Math.ceil(Math.min(Math.abs(min), Math.abs(max)));
   max = Math.floor(Math.max(Math.abs(min), Math.abs(max)));
 
-  // Проверки минимальное значение больше или равное максимальному
-  if (min >= max) {
-    return 'Минимальное значение не может быть больше Максимального! Может вы перепутили значения. Обратите на это внимание';
-  }
-
   // И если мы прошли все проверки, будем получать рандомное число из min и max значения
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
