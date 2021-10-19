@@ -16,6 +16,7 @@ const onDocumentKeydown = (evt) => {
   if (evt.key === 'Escape') {
     evt.preventDefault();
     initiateCloseForm();
+    formElement.reset();
   }
 };
 
@@ -26,7 +27,7 @@ function initiateOpenForm() {
   document.addEventListener('keydown', onDocumentKeydown);
 }
 
-function initiateCloseForm (){
+function initiateCloseForm() {
   openForm.classList.add('hidden');
   body.classList.remove('modal-open');
 
@@ -44,15 +45,44 @@ butСlose.addEventListener('click', () => {
 
 hashtags.addEventListener('input', () => {
   const value = hashtags.value;
+  const valueArr = value.split(' ');
   const re = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
 
-  if (!value.match(re)) {
-    hashtags.setCustomValidity('Хэш-тег всегда начинается с # и после нее может содержать пробелы, спецсимволы, символы пунктуации. Хэш-теги разделяются пробелами и длина одного 20 символов, включая решётку.');
-  } else {
-    hashtags.setCustomValidity('');
+  for (let i = 0; i <= valueArr.length; i++) {
+
+    if (valueArr.length > 5) {
+      hashtags.setCustomValidity('Количество Хэш-тегов не может быть больше пяти');
+    } else {
+      hashtags.setCustomValidity('');
+    }
+
+    if (!re.test(valueArr[i])) {
+      hashtags.setCustomValidity('Хэш-теги не могут содердать неправила');
+    } else {
+      hashtags.setCustomValidity('');
+    }
+
+    for (let j = i + 1; j < valueArr.length; j++) {
+
+      if (valueArr[i].toLowerCase() === valueArr[j].toLowerCase()) {
+        hashtags.setCustomValidity('Хэш-теги не могут одинаковыми');
+      } else {
+        hashtags.setCustomValidity('');
+      }
+    }
+
+    description.reportValidity();
   }
 
+  hashtags.addEventListener('keydown', (evt) => {
+    evt.stopPropagation();
+  });
+
   hashtags.reportValidity();
+});
+
+hashtags.addEventListener('keydown', (evt) => {
+  evt.stopPropagation();
 });
 
 description.addEventListener('input', () => {
