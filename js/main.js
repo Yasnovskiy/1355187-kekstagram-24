@@ -3,6 +3,7 @@ import './const.js';
 import './data.js';
 import './picture.js';
 import './big-picture.js';
+import './form.js';
 
 import {NECESSARY_SUM_OBJECTS} from './const.js';
 import {generateData, generateObject} from './data.js';
