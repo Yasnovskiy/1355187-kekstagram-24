@@ -5,6 +5,6 @@ const getRandomNumbarValue = (a, b) => {
   return Math.floor(Math.random() * (upper - lower + 1)) + lower;
 };
 
-const checkLengthString = (lengthString, validlength) => lengthString <= validlength;
+const checkLengthString = (string, validLength) => string.length <= validLength;
 
 export {getRandomNumbarValue, checkLengthString};

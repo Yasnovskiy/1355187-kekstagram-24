@@ -1,36 +1,39 @@
+import {
+  checkLengthString
+} from './util.js';
 // Открывает форм редактирования формы
-const openForm = document.querySelector('.img-upload__overlay');
+const openFormElement = document.querySelector('.img-upload__overlay');
 
 // Форма
 const formElement = document.querySelector('.img-upload__form');
 
 // Класс убирает скрол
-const body = document.body;
+const bodyElement = document.body;
 
 // Поля для добавления хеш-тегов и описания
-const hashtags = document.querySelector('.text__hashtags');
-const description = document.querySelector('.text__description');
+const hashtagElement = document.querySelector('.text__hashtags');
+const descriptionElement = document.querySelector('.text__description');
 
 // Кнопки для открытия и закрытия
-const butOpen = document.querySelector('#upload-file');
-const butСlose = document.querySelector('.img-upload__cancel');
+const buttonOpenForm = document.querySelector('#upload-file');
+const buttonСloseForm = document.querySelector('.img-upload__cancel');
 
 // Для удаления через клавишу ESC
 const onDocumentKeydown = (evt) => {
   if (evt.key === 'Escape') {
     evt.preventDefault();
-    initiateCloseForm();
+    closeForm();
   }
 };
 
-function initiateOpenForm() {
-  openForm.classList.remove('hidden');
-  body.classList.add('modal-open');
+function openForm() {
+  openFormElement.classList.remove('hidden');
+  bodyElement.classList.add('modal-open');
 
   document.addEventListener('keydown', onDocumentKeydown);
 }
 
-function initiateCloseForm() {
+function closeForm() {
   const hashtagsActiveElement = document.activeElement.classList.contains('text__hashtags');
   const descriptionActiveElement = document.activeElement.classList.contains('text__description');
 
@@ -38,67 +41,73 @@ function initiateCloseForm() {
     return;
   }
 
-  openForm.classList.add('hidden');
-  body.classList.remove('modal-open');
+  openFormElement.classList.add('hidden');
+  bodyElement.classList.remove('modal-open');
   formElement.reset();
 
   document.removeEventListener('keydown', onDocumentKeydown);
 }
 
-butOpen.addEventListener('change', () => {
-  initiateOpenForm();
+buttonOpenForm.addEventListener('change', () => {
+  openForm();
 });
 
-butСlose.addEventListener('click', () => {
-  initiateCloseForm();
+buttonСloseForm.addEventListener('click', () => {
+  closeForm();
   formElement.reset();
 });
 
-hashtags.addEventListener('input', () => {
-  const value = hashtags.value;
-  const valueArr = value.split(' ');
-  const re = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
+hashtagElement.addEventListener('input', () => {
+  const hastags = hashtagElement.value.split(' ');
+  const regex = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
 
-  if (valueArr.length > 5) {
-    hashtags.setCustomValidity('Количество Хэш-тегов не может быть больше пяти');
+  if (hastags.length > 5) {
+    hashtagElement.setCustomValidity('Количество Хэш-тегов не может быть больше пяти');
+    hashtagElement.reportValidity();
     return;
-  } else {
-    hashtags.setCustomValidity('');
   }
 
-  for (let i = 0; i <= valueArr.length - 1; i++) {
+  for (let i = 0; i < hastags.length; i++) {
 
-    if (!re.test(valueArr[i]) && valueArr[i] !== '') {
-      hashtags.setCustomValidity('Хэш-теги не могут содержать пробелы, спецсимволы, символы пунктуации, эмодзи. Максимальная длина одного хэш-тега 20 символов, включая решётку.');
+    const chekingHashtag = hastags[i];
+    const isEmtpyString = chekingHashtag === '';
+
+
+    if (!regex.test(chekingHashtag) && !isEmtpyString) {
+      hashtagElement.setCustomValidity('Хэш-теги не могут содержать пробелы, спецсимволы, символы пунктуации, эмодзи. Максимальная длина одного хэш-тега 20 символов, включая решётку.');
+      hashtagElement.reportValidity();
+      return;
     }
 
-    for (let j = i + 1; j < valueArr.length; j++) {
+    for (let j = i + 1; j < hastags.length; j++) {
 
-      if (valueArr[i].toLowerCase() === valueArr[j].toLowerCase()) {
-        hashtags.setCustomValidity('Один и тот же хэш-тег не может быть использован дважды.');
-      } else {
-        hashtags.setCustomValidity('');
+      const isDuplicate = chekingHashtag.toLowerCase() === hastags[j].toLowerCase();
+
+      if (isDuplicate) {
+        hashtagElement.setCustomValidity('Один и тот же хэш-тег не может быть использован дважды.');
+        hashtagElement.reportValidity();
+        return;
       }
     }
   }
 
-  hashtags.reportValidity();
+  hashtagElement.setCustomValidity('');
+
+  hashtagElement.reportValidity();
+
 });
 
-description.addEventListener('input', () => {
-  const value = description.value.length;
+descriptionElement.addEventListener('input', () => {
 
-  if (value >= 140) {
-    description.setCustomValidity('Строка не может быть больше 140 сим.');
-  } else {
-    description.setCustomValidity('');
-  }
+  !checkLengthString(descriptionElement.value, 140) ?
+    descriptionElement.setCustomValidity('Строка не может быть больше 140 сим.') :
+    descriptionElement.setCustomValidity('');
 
-  description.reportValidity();
+  descriptionElement.reportValidity();
 });
 
 formElement.addEventListener('submit', (evt) => {
   evt.preventDefault();
-  initiateCloseForm();
+  closeForm();
   formElement.reset();
 });
