@@ -4,14 +4,13 @@ const bigPicture = document.querySelector('.big-picture');
 const body = document.body;
 // Класс убирает rколичество коментариев
 const commentCount = document.querySelector('.social__comment-count');
+const commentCountView = document.querySelector('.comments-count--view');
 // Класс убирает скрол с маленьких картинок
 const commentsLoader = document.querySelector('.comments-loader');
 
 const initiateOpenBigPicture = () => {
   bigPicture.classList.remove('hidden');
   body.classList.add('modal-open');
-  commentCount.classList.add('hidden');
-  commentsLoader.classList.add('hidden');
 };
 
 const initiateCloseBigPicture = () => {
@@ -33,6 +32,38 @@ const bigPicturesListElement = document.querySelector('.social__comments');
 const bigPictureTemplate = document.querySelector('.social__comment');
 const bigPicturesListFragment = document.createDocumentFragment();
 
+const showComments = (num, arrComment) => {
+  let startIndex = 0;
+  let endIndex = num;
+
+  commentsLoader.addEventListener('click', () => {
+    arrComment.slice(startIndex, endIndex).forEach(renderComment);
+    startIndex = endIndex;
+    endIndex += num;
+    bigPicturesListElement.appendChild(bigPicturesListFragment);
+
+    if (arrComment.length <= startIndex) {
+      commentsLoader.classList.add('hidden');
+    }
+  });
+
+  function renderComment({avatar,name,message}) {
+    const bigPictureElement = bigPictureTemplate.cloneNode(true);
+
+    bigPictureElement.querySelector('.social__picture').src = avatar;
+    bigPictureElement.querySelector('.social__picture').alt = name;
+    bigPictureElement.querySelector('.social__text').textContent = message;
+
+    bigPicturesListFragment.appendChild(bigPictureElement);
+  }
+
+  arrComment.slice(startIndex, endIndex).forEach(renderComment);
+  startIndex = endIndex;
+  endIndex += num;
+
+  bigPicturesListElement.appendChild(bigPicturesListFragment);
+};
+
 const showBigPictures = (objectsData) => {
   const blockImg = document.querySelector('.big-picture__img');
   const likes = document.querySelector('.likes-count');
@@ -43,15 +74,18 @@ const showBigPictures = (objectsData) => {
   comments.textContent = objectsData.comments.length;
 
   bigPicturesListElement.innerHTML = '';
-  objectsData.comments.forEach(({avatar, name, message}) => {
-    const bigPictureElement = bigPictureTemplate.cloneNode(true);
+  commentCountView.textContent = '';
 
-    bigPictureElement.querySelector('.social__picture').src = avatar;
-    bigPictureElement.querySelector('.social__picture').alt = name;
-    bigPictureElement.querySelector('.social__text').textContent = message;
 
-    bigPicturesListFragment.appendChild(bigPictureElement);
-  });
+  if (objectsData.comments.length <= 5) {
+    commentCount.classList.add('hidden');
+    commentsLoader.classList.add('hidden');
+  }
+
+  showComments(5, objectsData.comments);
+
+  const fdsdfsfsdfasf = document.querySelectorAll('.social__comment');
+  commentCountView.textContent = fdsdfsfsdfasf.length;
 
   initiateOpenBigPicture();
 
@@ -59,7 +93,17 @@ const showBigPictures = (objectsData) => {
   bigPicture.querySelector('.big-picture__cancel').addEventListener('click', initiateCloseBigPicture);
   document.addEventListener('keydown', onDocumentKeydown);
 
-  bigPicturesListElement.appendChild(bigPicturesListFragment);
 };
 
-export {showBigPictures};
+export { showBigPictures };
+
+/*
+  Сейчас не знаю как сделать
+
+1. При нажатии на кнопку "Показать еще" что бы в диве, где написано сколько сейчас показанно, менялось значение
+2. Повторяется код
+3. Неуверен в правильности проверки на показ кнопки "Показать еще", она должна при достижение последних коментариев исчезать (сейчас работает с багом)
+Баг : открываем первую картинку все норм, закрываем 1 и открываем 2(где примерно 15 комментариев) и при первом нажатии на кнопку, появятся 5, а кнопка исчазнит, хотя еще есть комементарии
+
+
+*/

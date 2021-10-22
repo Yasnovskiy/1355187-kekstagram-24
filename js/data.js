@@ -23,7 +23,7 @@ const generateComment = (num) => {
 };
 
 const generateObject = (num) => {
-  const necessarySumObjects = getRandomNumbarValue(1, 5);
+  const necessarySumObjects = getRandomNumbarValue(10, 20);
 
   const object = {
     id: num,

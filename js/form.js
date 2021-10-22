@@ -1,6 +1,4 @@
-import {
-  checkLengthString
-} from './util.js';
+import { checkLengthString } from './util.js';
 // Открывает форм редактирования формы
 const openFormElement = document.querySelector('.img-upload__overlay');
 
