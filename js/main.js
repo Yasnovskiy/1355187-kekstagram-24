@@ -4,6 +4,8 @@ import './data.js';
 import './picture.js';
 import './big-picture.js';
 import './form.js';
+import './scale.js';
+import './slider.js';
 
 import {NECESSARY_SUM_OBJECTS} from './const.js';
 import {generateData, generateObject} from './data.js';
