@@ -1,3 +1,4 @@
+const sliderBox = document.querySelector('.effect-level');
 const sliderElement = document.querySelector('.effect-level__slider');
 const valueElement = document.querySelector('.effect-level__value');
 const imgPreviewElement = document.querySelector('.img-upload__preview');
@@ -72,18 +73,17 @@ const uiSliderSettings = {
   },
 };
 
-// Нужно прочитать доку и найти способ из коробки, для удаления, но мне так тоже нравится
-const uiSliderHiden = (isHiden) => {
-  if (isHiden) {
-    sliderElement.style = 'display:none;';
-  } else {
-    sliderElement.style = 'display:block;';
-  }
+const uiSliderHiden = () => {
+  sliderBox.style = 'display:none;';
 };
 
-uiSliderHiden(true);
+const uiSliderShow = () => {
+  sliderBox.style = 'display:block;';
+};
 
-const createFunctionSlider = (evt) => {
+uiSliderHiden();
+
+const handlerUISliderChange = (evt) => {
   if (evt.target.matches('input[type="radio"]')) {
     imgPreviewElement.classList.remove(`effects__preview--${selectedFilter}`);
     imgPreviewElement.classList.add(`effects__preview--${evt.target.value}`);
@@ -93,11 +93,11 @@ const createFunctionSlider = (evt) => {
     applyFilter(selectedFilter, imgPreviewElement, valueElement.getAttribute('value'));
 
     if (filters[evt.target.value.toUpperCase()] === filters.NONE) {
-      uiSliderHiden(true);
+      uiSliderHiden();
       return;
     }
 
-    uiSliderHiden(false);
+    uiSliderShow();
 
     let option = {};
     switch (evt.target.value) {
@@ -136,4 +136,4 @@ sliderElement.noUiSlider.on('update', (values, handle) => {
   applyFilter(selectedFilter, imgPreviewElement, valueElement.getAttribute('value'));
 });
 
-listElement.addEventListener('change', createFunctionSlider);
+listElement.addEventListener('change', handlerUISliderChange);
