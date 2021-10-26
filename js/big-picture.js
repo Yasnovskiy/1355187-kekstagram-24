@@ -35,33 +35,48 @@ const bigPicturesListFragment = document.createDocumentFragment();
 const showComments = (num, arrComment) => {
   let startIndex = 0;
   let endIndex = num;
+  const showedComments = arrComment.slice(startIndex, endIndex);
 
   commentsLoader.addEventListener('click', () => {
-    arrComment.slice(startIndex, endIndex).forEach(renderComment);
+    renderComment(showedComments);
     startIndex = endIndex;
     endIndex += num;
-    bigPicturesListElement.appendChild(bigPicturesListFragment);
+    // bigPicturesListElement.appendChild(bigPicturesListFragment);
 
     if (arrComment.length <= startIndex) {
       commentsLoader.classList.add('hidden');
     }
   });
 
-  function renderComment({avatar,name,message}) {
-    const bigPictureElement = bigPictureTemplate.cloneNode(true);
+  function renderComment(arr) {
+    arr.forEach((data) => {
+      const {avatar, name, message} = data;
+      const bigPictureElement = bigPictureTemplate.cloneNode(true);
 
-    bigPictureElement.querySelector('.social__picture').src = avatar;
-    bigPictureElement.querySelector('.social__picture').alt = name;
-    bigPictureElement.querySelector('.social__text').textContent = message;
+      bigPictureElement.querySelector('.social__picture').src = avatar;
+      bigPictureElement.querySelector('.social__picture').alt = name;
+      bigPictureElement.querySelector('.social__text').textContent = message;
 
-    bigPicturesListFragment.appendChild(bigPictureElement);
+      bigPicturesListFragment.appendChild(bigPictureElement);
+
+      bigPicturesListElement.appendChild(bigPicturesListFragment);
+    });
+
+    // const bigPictureElement = bigPictureTemplate.cloneNode(true);
+
+    // bigPictureElement.querySelector('.social__picture').src = arr.avatar;
+    // bigPictureElement.querySelector('.social__picture').alt = arr.name;
+    // bigPictureElement.querySelector('.social__text').textContent = arr.message;
+
+    // bigPicturesListFragment.appendChild(bigPictureElement);
   }
 
-  arrComment.slice(startIndex, endIndex).forEach(renderComment);
+  renderComment(showedComments);
+
   startIndex = endIndex;
   endIndex += num;
 
-  bigPicturesListElement.appendChild(bigPicturesListFragment);
+  // bigPicturesListElement.appendChild(bigPicturesListFragment);
 };
 
 const showBigPictures = (objectsData) => {
@@ -95,7 +110,9 @@ const showBigPictures = (objectsData) => {
 
 };
 
-export { showBigPictures };
+export {
+  showBigPictures
+};
 
 /*
   Сейчас не знаю как сделать
