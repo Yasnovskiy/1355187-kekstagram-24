@@ -2,7 +2,7 @@
 const bigPicture = document.querySelector('.big-picture');
 // Класс убирает скрол с маленьких картинок
 const body = document.body;
-// Класс убирает rколичество коментариев
+// Класс убирает количество коментариев
 const commentCount = document.querySelector('.social__comment-count');
 const commentCountView = document.querySelector('.comments-count--view');
 // Класс убирает скрол с маленьких картинок
@@ -32,51 +32,71 @@ const bigPicturesListElement = document.querySelector('.social__comments');
 const bigPictureTemplate = document.querySelector('.social__comment');
 const bigPicturesListFragment = document.createDocumentFragment();
 
-const showComments = (num, arrComment) => {
+const createRange = (array, step) => {
   let startIndex = 0;
-  let endIndex = num;
-  const showedComments = arrComment.slice(startIndex, endIndex);
+  const lenghtRange = array.length;
+  return function () {
+    const range = array.slice(startIndex, startIndex + step);
+    startIndex += step;
+    return {
+      count: startIndex > lenghtRange ? lenghtRange : startIndex,
+      range: range,
+    };
+  };
+};
 
-  commentsLoader.addEventListener('click', () => {
-    renderComment(showedComments);
-    startIndex = endIndex;
-    endIndex += num;
-    // bigPicturesListElement.appendChild(bigPicturesListFragment);
+const renderComments = (array) => {
 
-    if (arrComment.length <= startIndex) {
-      commentsLoader.classList.add('hidden');
-    }
+  array.forEach((arrayItem) => {
+    const {avatar, name, message} = arrayItem;
+    const bigPictureElement = bigPictureTemplate.cloneNode(true);
+
+    bigPictureElement.querySelector('.social__picture').src = avatar;
+    bigPictureElement.querySelector('.social__picture').alt = name;
+    bigPictureElement.querySelector('.social__text').textContent = message;
+
+    bigPicturesListFragment.appendChild(bigPictureElement);
   });
 
-  function renderComment(arr) {
-    arr.forEach((data) => {
-      const {avatar, name, message} = data;
-      const bigPictureElement = bigPictureTemplate.cloneNode(true);
+  bigPicturesListElement.appendChild(bigPicturesListFragment);
+};
 
-      bigPictureElement.querySelector('.social__picture').src = avatar;
-      bigPictureElement.querySelector('.social__picture').alt = name;
-      bigPictureElement.querySelector('.social__text').textContent = message;
+const showComments = (array) => {
+  const commentsView = document.querySelector('.comments-count--view');
 
-      bigPicturesListFragment.appendChild(bigPictureElement);
+  const arrayComment = createRange(array, 5);
 
-      bigPicturesListElement.appendChild(bigPicturesListFragment);
-    });
+  const {
+    count,
+    range,
+  } = arrayComment();
+  commentsView.textContent = count;
+  renderComments(range);
 
-    // const bigPictureElement = bigPictureTemplate.cloneNode(true);
-
-    // bigPictureElement.querySelector('.social__picture').src = arr.avatar;
-    // bigPictureElement.querySelector('.social__picture').alt = arr.name;
-    // bigPictureElement.querySelector('.social__text').textContent = arr.message;
-
-    // bigPicturesListFragment.appendChild(bigPictureElement);
+  if (range <= 5) {
+    commentCount.classList.add('hidden');
+    commentsLoader.classList.add('hidden');
   }
 
-  renderComment(showedComments);
+  commentsLoader.addEventListener('click', () => {
+    const {count, range} = arrayComment();
 
-  startIndex = endIndex;
-  endIndex += num;
+    commentsView.textContent = count;
 
-  // bigPicturesListElement.appendChild(bigPicturesListFragment);
+    /*тут как то стронно работает, получается при нажатии на первой фотографии все окей, но когда мы откроем любую другую где комментарий большем чем на первой
+      то при нажати на Загрузить еще то каунт кинет сначало последнее значение 1 фотографии, а через секунду кинет второе значение (которое сейчас есть)
+      про html это пофигу, так как он еще раз изменит, а для проверке нет, она сразу удалят класс....Я не знаю что делать.
+      Сделать тайм аут, или как то проверять несколько раз
+    */
+    console.log(count);
+
+    if (array.length === count) {
+      commentsLoader.classList.add('hidden');
+    }
+
+    renderComments(range);
+
+  });
 };
 
 const showBigPictures = (objectsData) => {
@@ -97,7 +117,7 @@ const showBigPictures = (objectsData) => {
     commentsLoader.classList.add('hidden');
   }
 
-  showComments(5, objectsData.comments);
+  showComments(objectsData.comments);
 
   const fdsdfsfsdfasf = document.querySelectorAll('.social__comment');
   commentCountView.textContent = fdsdfsfsdfasf.length;
@@ -110,17 +130,4 @@ const showBigPictures = (objectsData) => {
 
 };
 
-export {
-  showBigPictures
-};
-
-/*
-  Сейчас не знаю как сделать
-
-1. При нажатии на кнопку "Показать еще" что бы в диве, где написано сколько сейчас показанно, менялось значение
-2. Повторяется код
-3. Неуверен в правильности проверки на показ кнопки "Показать еще", она должна при достижение последних коментариев исчезать (сейчас работает с багом)
-Баг : открываем первую картинку все норм, закрываем 1 и открываем 2(где примерно 15 комментариев) и при первом нажатии на кнопку, появятся 5, а кнопка исчазнит, хотя еще есть комементарии
-
-
-*/
+export { showBigPictures };
