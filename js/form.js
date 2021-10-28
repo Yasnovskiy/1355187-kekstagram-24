@@ -1,6 +1,7 @@
-import {
-  checkLengthString
-} from './util.js';
+import { checkLengthString} from './util.js';
+import { sendData } from './api.js';
+import {showSuccess, showError} from './message.js';
+
 // Открывает форм редактирования формы
 const openFormElement = document.querySelector('.img-upload__overlay');
 
@@ -108,6 +109,14 @@ descriptionElement.addEventListener('input', () => {
 
 formElement.addEventListener('submit', (evt) => {
   evt.preventDefault();
+
+  sendData(
+    () => showSuccess(),
+    () => showError(),
+    new FormData(evt.target),
+  );
+
   closeForm();
-  formElement.reset();
 });
+
+//Хочу что бы обрабатывались ошибки и когда форма отвечает сообщением, нужно что бы пользователь не мог еще раз нажать на ипут
