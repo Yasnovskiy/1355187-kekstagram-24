@@ -2,7 +2,6 @@ const successTemplate = document.querySelector('#success').content.querySelector
 const errorTemplate = document.querySelector('#error').content.querySelector('.error');
 const main = document.querySelector('main');
 
-
 const onDocumentKeydown = function (evt) {
   if (evt.key === 'Escape') {
     evt.preventDefault();
@@ -31,11 +30,16 @@ function closeError() {
   }
 }
 
-const showError = () => {
+const showError = (errorMessage) => {
   const error = errorTemplate.cloneNode(true);
-  // error.querySelector('.error__title').textContent  = errorMessage;
+  error.querySelector('.error__title').textContent  = errorMessage;
 
-  error.addEventListener('click',  () => {
+
+  error.addEventListener('click', (evt) => {
+    if (evt.target.classList.contains('error__inner') || evt.target.classList.contains('error__title')) {
+      return;
+    }
+
     closeError();
   });
 
@@ -48,7 +52,11 @@ const showSuccess = () => {
 
   const success = successTemplate.cloneNode(true);
 
-  success.addEventListener('click',  () => {
+  success.addEventListener('click',  (evt) => {
+    if (evt.target.classList.contains('success__inner') || evt.target.classList.contains('success__title')) {
+      return;
+    }
+
     closeSuccess();
   });
 

@@ -107,12 +107,16 @@ descriptionElement.addEventListener('input', () => {
   descriptionElement.reportValidity();
 });
 
+const onError = (errorMessage) => {
+  showError(errorMessage);
+};
+
 formElement.addEventListener('submit', (evt) => {
   evt.preventDefault();
 
   sendData(
     () => showSuccess(),
-    () => showError(),
+    onError,
     new FormData(evt.target),
   );
 
