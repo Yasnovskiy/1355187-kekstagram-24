@@ -1,10 +1,11 @@
 import { checkLengthString} from './util.js';
 import { sendData } from './api.js';
 import {showSuccess, showError} from './message.js';
+import {uiSliderHiden} from './slider.js';
 
 // Открывает форм редактирования формы
 const openFormElement = document.querySelector('.img-upload__overlay');
-
+const safds = document.querySelector('.img-upload__preview');
 // Форма
 const formElement = document.querySelector('.img-upload__form');
 
@@ -45,6 +46,11 @@ function closeForm() {
   openFormElement.classList.add('hidden');
   bodyElement.classList.remove('modal-open');
   formElement.reset();
+  safds.style.filter = '';
+  safds.style.transform = '';
+  safds.removeAttribute('class');
+  safds.classList.add('img-upload__preview');
+  uiSliderHiden();
 
   document.removeEventListener('keydown', onDocumentKeydown);
 }

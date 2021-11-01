@@ -137,3 +137,5 @@ sliderElement.noUiSlider.on('update', (values, handle) => {
 });
 
 listElement.addEventListener('change', handlerUISliderChange);
+
+export {uiSliderHiden};
