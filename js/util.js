@@ -13,6 +13,19 @@ const getRandomArrayElement = (elements) => {
   return newElement;
 };
 
+const getRandomElements  = (array) => {
+  const previousValues = [];
+
+  return function () {
+    let currentValue = getRandomArrayElement(array);
+    while (previousValues.includes(currentValue)) {
+      currentValue = getRandomArrayElement(array);
+    }
+    previousValues.push(currentValue);
+    return currentValue;
+  };
+};
+
 const debounce = (callback, timeoutDelay = 500) => {
   let timeoutId;
 
@@ -29,24 +42,4 @@ const debounce = (callback, timeoutDelay = 500) => {
   };
 };
 
-
-// function debounce (callback, timeoutDelay = 500) {
-//   // Используем замыкания, чтобы id таймаута у нас навсегда приклеился
-//   // к возвращаемой функции с setTimeout, тогда мы его сможем перезаписывать
-//   let timeoutId;
-
-//   return (...rest) => {
-//     // Перед каждым новым вызовом удаляем предыдущий таймаут,
-//     // чтобы они не накапливались
-//     clearTimeout(timeoutId);
-
-//     // Затем устанавливаем новый таймаут с вызовом колбэка на ту же задержку
-//     timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
-
-//     // Таким образом цикл "поставить таймаут - удалить таймаут" будет выполняться,
-//     // пока действие совершается чаще, чем переданная задержка timeoutDelay
-//   };
-// }
-
-
-export {getRandomNumbarValue, checkLengthString, getRandomArrayElement, debounce};
+export {getRandomNumbarValue, checkLengthString, getRandomArrayElement, debounce, getRandomElements};

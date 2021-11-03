@@ -1,39 +1,28 @@
-import {getRandomArrayElement} from './util.js';
+import {getRandomElements, debounce} from './util.js';
 import {generatePictures} from './picture.js';
 import {showBigPictures} from './big-picture.js';
 
 const filterElement = document.querySelector('.img-filters');
-const buttonElement = document.querySelectorAll('.img-filters__button');
+const buttonElements = document.querySelectorAll('.img-filters__button');
+
+const [defaultButtonElement, randomBattonElement, discussedButtonElement] = buttonElements;
 
 const removeActive = () => {
-  buttonElement.forEach((buttonIteam) => {
+  buttonElements.forEach((buttonIteam) => {
     buttonIteam.classList.remove('img-filters__button--active');
   });
 };
 
-function createRandomRangeGenerator (array) {
-  const previousValues = [];
+const getRandomPictures = (array, quantityElement) => {
+  const generatePhotoId = getRandomElements(array);
 
-  return function () {
-    let currentValue = getRandomArrayElement(array);
-    while (previousValues.includes(currentValue)) {
-      currentValue = getRandomArrayElement(array);
-    }
-    previousValues.push(currentValue);
-    return currentValue;
-  };
-}
+  const arrayValue = [];
 
-const getRandomFilterElements = (array) => {
-  const generatePhotoId = createRandomRangeGenerator(array);
-
-  const arr1 = [];
-
-  for (let i = 0; i < 10; i++) {
-    arr1[i] = generatePhotoId();
+  for (let i = 0; i < quantityElement; i++) {
+    arrayValue[i] = generatePhotoId();
   }
 
-  return arr1;
+  return arrayValue;
 };
 
 const getPopularComments = (array) => {
@@ -54,47 +43,56 @@ const getPopularComments = (array) => {
   return arrayValue;
 };
 
+
+const setActiveButton = (buttonElement) => {
+  buttonElement.classList.add('img-filters__button--active');
+};
+
 let carenSectionActive = 'filter-default';
 
 const filterCheck = (evt, array) => {
-  if (carenSectionActive === evt.target.id) {
+  const selectedFilter = evt.target.id;
+
+  if (carenSectionActive === selectedFilter) {
     return;
   }
 
   removeActive();
 
   if (evt.target.matches('.img-filters__button')) {
-    carenSectionActive = evt.target.id;
+    carenSectionActive = selectedFilter;
 
-    switch (evt.target.id) {
+    let result;
+    switch (selectedFilter) {
       case 'filter-default': {
-        buttonElement[0].classList.add('img-filters__button--active');
-        generatePictures(array, showBigPictures);
+        setActiveButton(defaultButtonElement);
+        result = array;
         break;
       }
       case 'filter-random': {
-        buttonElement[1].classList.add('img-filters__button--active');
-        const result = getRandomFilterElements(array);
-        generatePictures(result, showBigPictures);
+        setActiveButton(randomBattonElement);
+        result = getRandomPictures(array, 10);
         break;
       }
       case 'filter-discussed': {
-        buttonElement[2].classList.add('img-filters__button--active');
-        const result = getPopularComments(array);
-        generatePictures(result, showBigPictures);
+        setActiveButton(discussedButtonElement);
+        result = getPopularComments(array);
         break;
       }
     }
+
+    debounce(generatePictures(result, showBigPictures));
   }
 };
 
 
-const changeFilter = (array, cb = () => {}) => {
+const changeFilter = (array) => {
   filterElement.classList.remove('img-filters--inactive');
+
+  generatePictures(array, showBigPictures);
 
   filterElement.addEventListener('click', (evt) => {
     filterCheck(evt, array);
-    cb;
   });
 };
 

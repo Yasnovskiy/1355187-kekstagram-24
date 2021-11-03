@@ -5,7 +5,8 @@ import {uiSliderHiden} from './slider.js';
 
 // Открывает форм редактирования формы
 const openFormElement = document.querySelector('.img-upload__overlay');
-const safds = document.querySelector('.img-upload__preview');
+const imgPreviewElement = document.querySelector('.img-upload__preview');
+const inputElement = document.querySelector('.scale__control--value');
 // Форма
 const formElement = document.querySelector('.img-upload__form');
 
@@ -46,10 +47,11 @@ function closeForm() {
   openFormElement.classList.add('hidden');
   bodyElement.classList.remove('modal-open');
   formElement.reset();
-  safds.style.filter = '';
-  safds.style.transform = '';
-  safds.removeAttribute('class');
-  safds.classList.add('img-upload__preview');
+  imgPreviewElement.style.filter = '';
+  imgPreviewElement.style.transform = '';
+  inputElement.setAttribute('value', '100%');
+  imgPreviewElement.removeAttribute('class');
+  imgPreviewElement.classList.add('img-upload__preview');
   uiSliderHiden();
 
   document.removeEventListener('keydown', onDocumentKeydown);
