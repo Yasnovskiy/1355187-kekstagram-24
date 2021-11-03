@@ -4,6 +4,8 @@ const commentCount = document.querySelector('.social__comment-count');
 const commentCountView = document.querySelector('.comments-count--view');
 const commentsLoader = document.querySelector('.comments-loader');
 
+const REQUIRED_NUMBER_COMMENTS = 5;
+
 let handlerLotComments = () => {};
 
 const openBigPicture = () => {
@@ -64,13 +66,13 @@ const renderComments = (array) => {
 const showComments = (array) => {
   const commentsView = document.querySelector('.comments-count--view');
 
-  const arrayComment = createRange(array, 5);
+  const arrayComment = createRange(array, REQUIRED_NUMBER_COMMENTS);
 
   const {count, range} = arrayComment();
   commentsView.textContent = count;
   renderComments(range);
 
-  if (range <= 5) {
+  if (range <= REQUIRED_NUMBER_COMMENTS) {
     commentCount.classList.add('hidden');
     commentsLoader.classList.add('hidden');
   }
@@ -103,7 +105,7 @@ const showBigPictures = (objectsData) => {
   commentCountView.textContent = '';
 
 
-  if (objectsData.comments.length <= 5) {
+  if (objectsData.comments.length <= REQUIRED_NUMBER_COMMENTS) {
     commentCount.classList.add('hidden');
     commentsLoader.classList.add('hidden');
   }
