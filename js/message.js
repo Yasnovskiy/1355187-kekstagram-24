@@ -10,7 +10,6 @@ const onDocumentKeydown = function (evt) {
   }
 };
 
-
 function closeSuccess() {
   const success = main.querySelector('.success');
 
@@ -19,7 +18,6 @@ function closeSuccess() {
     document.removeEventListener('keydown', onDocumentKeydown);
   }
 }
-
 
 function closeError() {
   const error = main.querySelector('.error');
@@ -30,10 +28,11 @@ function closeError() {
   }
 }
 
-const showError = (errorMessage) => {
+const showError = (errorMessage, buttonDisplay = true) => {
   const error = errorTemplate.cloneNode(true);
   error.querySelector('.error__title').textContent  = errorMessage;
 
+  buttonDisplay ? '' : error.querySelector('.error__button').style.display = 'none';
 
   error.addEventListener('click', (evt) => {
     if (evt.target.classList.contains('error__inner') || evt.target.classList.contains('error__title')) {
@@ -64,6 +63,5 @@ const showSuccess = () => {
 
   main.appendChild(success);
 };
-
 
 export {showSuccess, showError};

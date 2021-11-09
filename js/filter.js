@@ -4,8 +4,10 @@ import {showBigPictures} from './big-picture.js';
 
 const filterElement = document.querySelector('.img-filters');
 const buttonElements = document.querySelectorAll('.img-filters__button');
-
+const NUMBER_RANDOM_PHOTOS = 10;
 const [defaultButtonElement, randomBattonElement, discussedButtonElement] = buttonElements;
+
+const debounceGeneratePictures = debounce(generatePictures);
 
 const removeActive = () => {
   buttonElements.forEach((buttonIteam) => {
@@ -43,12 +45,17 @@ const getPopularComments = (array) => {
   return arrayValue;
 };
 
-
 const setActiveButton = (buttonElement) => {
   buttonElement.classList.add('img-filters__button--active');
 };
 
-let carenSectionActive = 'filter-default';
+const filters = {
+  default: 'filter-default',
+  random: 'filter-random',
+  discussed: 'filter-discussed',
+};
+
+let carenSectionActive = filters.default;
 
 const filterCheck = (evt, array) => {
   const selectedFilter = evt.target.id;
@@ -64,27 +71,26 @@ const filterCheck = (evt, array) => {
 
     let result;
     switch (selectedFilter) {
-      case 'filter-default': {
+      case filters.default : {
         setActiveButton(defaultButtonElement);
         result = array;
         break;
       }
-      case 'filter-random': {
+      case filters.random : {
         setActiveButton(randomBattonElement);
-        result = getRandomPictures(array, 10);
+        result = getRandomPictures(array, NUMBER_RANDOM_PHOTOS);
         break;
       }
-      case 'filter-discussed': {
+      case filters.discussed : {
         setActiveButton(discussedButtonElement);
         result = getPopularComments(array);
         break;
       }
     }
 
-    debounce(generatePictures(result, showBigPictures));
+    debounceGeneratePictures(result, showBigPictures);
   }
 };
-
 
 const changeFilter = (array) => {
   filterElement.classList.remove('img-filters--inactive');

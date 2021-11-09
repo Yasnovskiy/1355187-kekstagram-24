@@ -4,31 +4,6 @@ const valueElement = document.querySelector('.effect-level__value');
 const imgPreviewElement = document.querySelector('.img-upload__preview');
 const listElement = document.querySelector('.effects__list');
 
-const applyFilter = (caretFilter, node, value) => {
-  switch (caretFilter) {
-    case 'none':
-      node.style.filter = '';
-      break;
-    case 'chrome':
-      node.style.filter = `grayscale(${value})`;
-      break;
-    case 'sepia':
-      node.style.filter = `sepia(${value})`;
-      break;
-    case 'marvin':
-      node.style.filter = `invert(${value}%)`;
-      break;
-    case 'phobos':
-      node.style.filter = `blur(${value}px)`;
-      break;
-    case 'heat':
-      node.style.filter = `brightness(${value})`;
-      break;
-  }
-};
-
-let selectedFilter = null;
-
 const filters = {
   NONE: 'none',
   CHROME: 'chrome',
@@ -37,6 +12,31 @@ const filters = {
   PHOBOS: 'phobos',
   HEAT: 'heat',
 };
+
+const applyFilter = (createFilter, node, value) => {
+  switch (createFilter) {
+    case filters.NONE:
+      node.style.filter = '';
+      break;
+    case filters.CHROME:
+      node.style.filter = `grayscale(${value})`;
+      break;
+    case filters.SEPIA:
+      node.style.filter = `sepia(${value})`;
+      break;
+    case filters.MARVIN:
+      node.style.filter = `invert(${value}%)`;
+      break;
+    case filters.PHOBOS:
+      node.style.filter = `blur(${value}px)`;
+      break;
+    case filters.HEAT:
+      node.style.filter = `brightness(${value})`;
+      break;
+  }
+};
+
+let selectedFilter = null;
 
 const uiSliderSettings = {
   [filters.CHROME]: {
@@ -139,3 +139,4 @@ sliderElement.noUiSlider.on('update', (values, handle) => {
 listElement.addEventListener('change', handlerUISliderChange);
 
 export {uiSliderHiden};
+
