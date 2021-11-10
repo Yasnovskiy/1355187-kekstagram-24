@@ -104,7 +104,6 @@ const showBigPictures = (objectsData) => {
   bigPicturesListElement.innerHTML = '';
   commentCountView.textContent = '';
 
-
   if (objectsData.comments.length <= REQUIRED_NUMBER_COMMENTS) {
     commentCount.classList.add('hidden');
     commentsLoader.classList.add('hidden');
@@ -112,8 +111,8 @@ const showBigPictures = (objectsData) => {
 
   showComments(objectsData.comments);
 
-  const fdsdfsfsdfasf = document.querySelectorAll('.social__comment');
-  commentCountView.textContent = fdsdfsfsdfasf.length;
+  const socialComment = document.querySelectorAll('.social__comment');
+  commentCountView.textContent = socialComment.length;
 
   openBigPicture();
 
