@@ -1,17 +1,24 @@
-const errorMessage = (status) => {
+const statusError = {
+  'BAD REQUEST': 400,
+  'UNDEFINED USER': 401,
+  'NOT FOUND': 404,
+  'SERVER ERROR': 500,
+};
+
+const getErrorMessage = (status) => {
   let error;
 
   switch (status) {
-    case 400:
+    case statusError['BAD REQUEST']:
       error = 'Неверный запрос';
       break;
-    case 401:
+    case statusError['UNDEFINED USER']:
       error = 'Пользователь не авторизован';
       break;
-    case 404:
+    case statusError['NOT FOUND']:
       error = 'Ничего не найдено';
       break;
-    case 500:
+    case statusError['SERVER ERROR']:
       error = 'Внутренняя ошибка сервера';
       break;
   }
@@ -31,7 +38,7 @@ const getData = (onSuccess, onFail) => {
         return response.json();
       }
 
-      throw new Error(errorMessage(response.status));
+      throw new Error(getErrorMessage(response.status));
     })
     .then((data) => {
       onSuccess(data);
@@ -52,7 +59,7 @@ const sendData = (onSuccess, onFail, body) => {
       if (response.ok) {
         onSuccess();
       } else {
-        onFail(errorMessage(response.status));
+        onFail(getErrorMessage(response.status));
       }
     })
     .catch((error) => {

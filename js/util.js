@@ -1,3 +1,5 @@
+const RERENDER_DELAY = 500;
+
 const getRandomNumbarValue = (a, b) => {
   const lower = Math.ceil(Math.min(Math.abs(a), Math.abs(b)));
   const upper = Math.floor(Math.max(Math.abs(a), Math.abs(b)));
@@ -13,6 +15,8 @@ const getRandomArrayElement = (elements) => {
   return newElement;
 };
 
+const isEscapeKey = (evt) =>  evt.key === 'Escape';
+
 const getRandomElements  = (array) => {
   const previousValues = [];
 
@@ -26,7 +30,7 @@ const getRandomElements  = (array) => {
   };
 };
 
-const debounce = (callback, timeoutDelay = 500) => {
+const debounce = (callback, timeoutDelay = RERENDER_DELAY) => {
   let timeoutId;
 
   return (...rest) => {
@@ -42,4 +46,4 @@ const debounce = (callback, timeoutDelay = 500) => {
   };
 };
 
-export {getRandomNumbarValue, checkLengthString, getRandomArrayElement, debounce, getRandomElements};
+export {getRandomNumbarValue, checkLengthString, getRandomArrayElement, debounce, getRandomElements, isEscapeKey};

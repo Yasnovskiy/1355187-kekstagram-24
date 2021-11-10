@@ -1,4 +1,4 @@
-import { checkLengthString} from './util.js';
+import { checkLengthString, isEscapeKey} from './util.js';
 import { sendData } from './api.js';
 import {showSuccess, showError} from './message.js';
 import {uiSliderHiden} from './slider.js';
@@ -23,7 +23,7 @@ const buttonСloseForm = document.querySelector('.img-upload__cancel');
 
 // Для удаления через клавишу ESC
 const onDocumentKeydown = (evt) => {
-  if (evt.key === 'Escape') {
+  if (isEscapeKey(evt)) {
     evt.preventDefault();
     closeForm();
   }

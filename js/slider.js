@@ -73,7 +73,7 @@ const uiSliderSettings = {
   },
 };
 
-const uiSliderHiden = () => {
+const uiSliderHidden = () => {
   sliderBox.style = 'display:none;';
 };
 
@@ -81,7 +81,7 @@ const uiSliderShow = () => {
   sliderBox.style = 'display:block;';
 };
 
-uiSliderHiden();
+uiSliderHidden();
 
 const handlerUISliderChange = (evt) => {
   if (evt.target.matches('input[type="radio"]')) {
@@ -93,7 +93,7 @@ const handlerUISliderChange = (evt) => {
     applyFilter(selectedFilter, imgPreviewElement, valueElement.getAttribute('value'));
 
     if (filters[evt.target.value.toUpperCase()] === filters.NONE) {
-      uiSliderHiden();
+      uiSliderHidden();
       return;
     }
 
@@ -138,5 +138,5 @@ sliderElement.noUiSlider.on('update', (values, handle) => {
 
 listElement.addEventListener('change', handlerUISliderChange);
 
-export {uiSliderHiden};
+export {uiSliderHidden as uiSliderHiden};
 

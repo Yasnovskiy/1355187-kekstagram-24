@@ -5,7 +5,7 @@ import {showBigPictures} from './big-picture.js';
 const filterElement = document.querySelector('.img-filters');
 const buttonElements = document.querySelectorAll('.img-filters__button');
 const NUMBER_RANDOM_PHOTOS = 10;
-const [defaultButtonElement, randomBattonElement, discussedButtonElement] = buttonElements;
+const [defaultButtonElement, randomButtonElement, discussedButtonElement] = buttonElements;
 
 const debounceGeneratePictures = debounce(generatePictures);
 
@@ -77,7 +77,7 @@ const filterCheck = (evt, array) => {
         break;
       }
       case filters.random : {
-        setActiveButton(randomBattonElement);
+        setActiveButton(randomButtonElement);
         result = getRandomPictures(array, NUMBER_RANDOM_PHOTOS);
         break;
       }

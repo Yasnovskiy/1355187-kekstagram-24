@@ -1,32 +1,36 @@
+import {isEscapeKey} from './util.js';
+
 const successTemplate = document.querySelector('#success').content.querySelector('.success');
 const errorTemplate = document.querySelector('#error').content.querySelector('.error');
 const main = document.querySelector('main');
 
-const onDocumentKeydown = function (evt) {
-  if (evt.key === 'Escape') {
+const closeSuccess = (keydownHandler) => {
+  const success = main.querySelector('.success');
+
+  if (success) {
+    success.remove();
+    document.removeEventListener('keydown', keydownHandler);
+  }
+};
+
+const closeError = (keydownHandler) => {
+  const error = main.querySelector('.error');
+
+  if (error) {
+    error.remove();
+    document.removeEventListener('keydown', keydownHandler);
+  }
+};
+
+const onDocumentKeydown = (evt) => {
+  if (isEscapeKey(evt)) {
     evt.preventDefault();
     closeSuccess();
     closeError();
   }
 };
 
-function closeSuccess() {
-  const success = main.querySelector('.success');
-
-  if (success) {
-    success.remove();
-    document.removeEventListener('keydown', onDocumentKeydown);
-  }
-}
-
-function closeError() {
-  const error = main.querySelector('.error');
-
-  if (error) {
-    error.remove();
-    document.removeEventListener('keydown', onDocumentKeydown);
-  }
-}
+document.addEventListener('keydown', onDocumentKeydown);
 
 const showError = (errorMessage, buttonDisplay = true) => {
   const error = errorTemplate.cloneNode(true);
@@ -39,10 +43,8 @@ const showError = (errorMessage, buttonDisplay = true) => {
       return;
     }
 
-    closeError();
+    closeError(onDocumentKeydown);
   });
-
-  document.addEventListener('keydown', onDocumentKeydown);
 
   main.appendChild(error);
 };
@@ -56,10 +58,9 @@ const showSuccess = () => {
       return;
     }
 
-    closeSuccess();
+    closeSuccess(onDocumentKeydown);
   });
 
-  document.addEventListener('keydown', onDocumentKeydown);
 
   main.appendChild(success);
 };

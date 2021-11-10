@@ -1,3 +1,5 @@
+import {isEscapeKey} from './util.js';
+
 const body = document.body;
 const bigPicture = document.querySelector('.big-picture');
 const commentCount = document.querySelector('.social__comment-count');
@@ -24,7 +26,7 @@ const closeBigPicture = () => {
 
 // Для удаления через клавишу ESC
 const onDocumentKeydown = (evt) => {
-  if (evt.key === 'Escape') {
+  if (isEscapeKey(evt)) {
     evt.preventDefault();
     closeBigPicture();
   }
@@ -63,12 +65,10 @@ const renderComments = (array) => {
   bigPicturesListElement.appendChild(bigPicturesListFragment);
 };
 
-const showComments = (array) => {
+const showRangeComments = (getRangeComment) => {
   const commentsView = document.querySelector('.comments-count--view');
+  const {count, range} = getRangeComment();
 
-  const arrayComment = createRange(array, REQUIRED_NUMBER_COMMENTS);
-
-  const {count, range} = arrayComment();
   commentsView.textContent = count;
   renderComments(range);
 
@@ -76,17 +76,16 @@ const showComments = (array) => {
     commentCount.classList.add('hidden');
     commentsLoader.classList.add('hidden');
   }
+};
+
+const showComments = (array) => {
+
+  const getRangeComment = createRange(array, REQUIRED_NUMBER_COMMENTS);
+
+  showRangeComments(getRangeComment);
 
   handlerLotComments = () => {
-    const {count, range} = arrayComment();
-
-    commentsView.textContent = count;
-
-    if (array.length === count) {
-      commentsLoader.classList.add('hidden');
-    }
-
-    renderComments(range);
+    showRangeComments(getRangeComment);
   };
 
   commentsLoader.addEventListener('click', handlerLotComments);
